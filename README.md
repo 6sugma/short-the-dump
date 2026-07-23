@@ -1,6 +1,6 @@
 # Short the Dump
 
-##TLDR: Program the finds the pump and shorts the dump!
+##TLDR: Program that finds the pump and shorts the dump!
 
 Short the Dump is an open-source, Python research platform for exchange-listed, low-float small-cap momentum events. It detects extreme Day 0 price/volume moves, builds a point-in-time evidence file, rates observable momentum failure, applies broker-specific short-execution and account-risk gates, and compares same-day, Day +1, first-red-day, and Day +2 short simulations.
 
