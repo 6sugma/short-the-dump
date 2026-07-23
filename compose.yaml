@@ -1,0 +1,13 @@
+services:
+  research:
+    build: .
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - research-data:/data
+    environment:
+      SHORT_THE_DUMP_OPERATOR_TOKEN: ${SHORT_THE_DUMP_OPERATOR_TOKEN:-}
+    restart: unless-stopped
+
+volumes:
+  research-data:

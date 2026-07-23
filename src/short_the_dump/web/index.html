@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="Point-in-time small-cap reversal research dashboard">
+  <title>Short the Dump — Research Console</title>
+  <link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to candidates</a>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">S/D</span>
+      <div>
+        <h1>Short the Dump</h1>
+        <p>Point-in-time reversal research console</p>
+      </div>
+    </div>
+    <div class="system-state" aria-live="polite">
+      <span id="health-dot" class="health-dot"></span>
+      <span id="mode-badge" class="badge">Loading</span>
+      <span id="freshness">Checking source freshness…</span>
+    </div>
+  </header>
+
+  <div id="fixture-banner" class="notice warning" hidden>
+    Demo mode: every symbol, source, locate, and result shown here is a deterministic synthetic fixture—not live market data.
+  </div>
+  <div class="notice safety">
+    Research software, not investment advice. Default mode cannot route orders. A score is an explainable evidence rating, never a calibrated probability.
+  </div>
+
+  <main id="main">
+    <section class="metric-grid" aria-label="System summary">
+      <article class="metric-card">
+        <span class="metric-label">Candidate decisions</span>
+        <strong id="metric-candidates">—</strong>
+        <small id="metric-alerts">— awaiting review</small>
+      </article>
+      <article class="metric-card">
+        <span class="metric-label">Broker-executable</span>
+        <strong id="metric-executable">—</strong>
+        <small>after locate, spread, liquidity &amp; margin</small>
+      </article>
+      <article class="metric-card">
+        <span class="metric-label">Average evidence score</span>
+        <strong id="metric-score">—</strong>
+        <small>0–100 transparent rule rating</small>
+      </article>
+      <article class="metric-card">
+        <span class="metric-label">Audit integrity</span>
+        <strong id="metric-audit">—</strong>
+        <small>SHA-256 chained operator log</small>
+      </article>
+      <article class="metric-card risk-card">
+        <span class="metric-label">Configured daily loss limit</span>
+        <strong id="metric-daily-loss">—</strong>
+        <small id="metric-position-limit">— concurrent positions</small>
+      </article>
+    </section>
+
+    <section class="panel candidate-panel">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">Action queue</p>
+          <h2>Candidate alerts</h2>
+          <p>Ranked evidence with a separate execution verdict. Non-executable research stays visible but cannot be approved.</p>
+        </div>
+        <button id="refresh-button" class="button secondary" type="button">Refresh</button>
+      </div>
+      <div class="filters" aria-label="Candidate filters">
+        <label>Status
+          <select id="status-filter">
+            <option value="all">All statuses</option>
+            <option value="alerted">Alerted</option>
+            <option value="watch">Watch</option>
+            <option value="approved">Approved</option>
+            <option value="rejected">Rejected</option>
+            <option value="ordered">Ordered</option>
+            <option value="closed">Closed</option>
+            <option value="expired">Expired</option>
+          </select>
+        </label>
+        <label>Evidence
+          <select id="band-filter">
+            <option value="all">All bands</option>
+            <option value="strong_failure_evidence">Strong failure</option>
+            <option value="failure_evidence">Failure evidence</option>
+            <option value="mixed">Mixed</option>
+            <option value="momentum_intact_or_insufficient">Insufficient</option>
+          </select>
+        </label>
+        <label>Execution
+          <select id="execution-filter">
+            <option value="all">All verdicts</option>
+            <option value="yes">Executable</option>
+            <option value="no">Rejected by gate</option>
+          </select>
+        </label>
+        <label class="search-label">Symbol
+          <input id="symbol-filter" type="search" placeholder="Filter ticker" autocomplete="off">
+        </label>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Symbol</th>
+              <th scope="col">Day 0</th>
+              <th scope="col">Score</th>
+              <th scope="col">Catalyst</th>
+              <th scope="col">Turnover</th>
+              <th scope="col">Execution</th>
+              <th scope="col">Risk size</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody id="candidate-rows">
+            <tr><td colspan="8" class="empty">Loading candidate queue…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="candidate-detail" class="panel detail-panel" aria-live="polite">
+      <div class="empty-state">
+        <span class="empty-icon" aria-hidden="true">↳</span>
+        <h2>Select a candidate</h2>
+        <p>Inspect its point-in-time evidence, broker checks, risk plan, SEC supply flags, and historical analogs.</p>
+      </div>
+    </section>
+
+    <section class="split-grid">
+      <article class="panel">
+        <div class="panel-heading compact">
+          <div>
+            <p class="eyebrow">Simulation</p>
+            <h2>Strategy comparison</h2>
+            <p>Net of modeled slippage, locate, and borrow cost.</p>
+          </div>
+        </div>
+        <div id="strategy-chart" class="strategy-chart" aria-label="Backtest net profit by strategy"></div>
+        <div class="table-scroll compact-table">
+          <table>
+            <thead><tr><th>Run</th><th>Trades</th><th>Win rate</th><th>Net P&amp;L</th><th>Drawdown</th><th>Forced</th></tr></thead>
+            <tbody id="backtest-rows"><tr><td colspan="6" class="empty">Loading simulations…</td></tr></tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-heading compact">
+          <div>
+            <p class="eyebrow">Hard guardrails</p>
+            <h2>Risk contract</h2>
+            <p>Independent of the signal rating and enforced before order creation.</p>
+          </div>
+        </div>
+        <dl id="risk-contract" class="definition-grid"></dl>
+        <div class="invariant">
+          <span aria-hidden="true">⛔</span>
+          <div><strong>No averaging into losing shorts</strong><p>This invariant cannot be disabled by configuration in this release.</p></div>
+        </div>
+        <div class="invariant">
+          <span aria-hidden="true">✋</span>
+          <div><strong>Manual approval required</strong><p>Dashboard mutation endpoints are off until an operator token is set.</p></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="panel">
+      <div class="panel-heading compact">
+        <div>
+          <p class="eyebrow">Traceability</p>
+          <h2>Recent audit activity</h2>
+          <p>Append-only actions are linked by their prior record hash.</p>
+        </div>
+      </div>
+      <ol id="audit-list" class="audit-list"><li class="empty">Loading audit log…</li></ol>
+    </section>
+  </main>
+
+  <dialog id="review-dialog">
+    <form id="review-form" method="dialog">
+      <div class="dialog-heading">
+        <div><p class="eyebrow">Manual control</p><h2 id="review-title">Review candidate</h2></div>
+        <button type="button" id="dialog-close" class="icon-button" aria-label="Close">×</button>
+      </div>
+      <input id="review-decision" type="hidden">
+      <input id="review-action" type="hidden">
+      <label>Operator name<input id="review-operator" required minlength="2" maxlength="80"></label>
+      <label>Decision reason<textarea id="review-reason" required minlength="5" maxlength="500" rows="4"></textarea></label>
+      <label>Local operator token<input id="review-token" type="password" required autocomplete="off"></label>
+      <p class="dialog-note">The token is sent once and is never stored by this page.</p>
+      <div id="review-error" class="form-error" role="alert"></div>
+      <div class="dialog-actions">
+        <button type="button" id="dialog-cancel" class="button secondary">Cancel</button>
+        <button type="submit" id="review-submit" class="button">Submit review</button>
+      </div>
+    </form>
+  </dialog>
+
+  <footer>
+    <span>Short the Dump · open-source research infrastructure</span>
+    <span>Sources and timestamps appear with every candidate. Verify broker data at the point of order.</span>
+  </footer>
+  <script src="/assets/app.js" defer></script>
+</body>
+</html>

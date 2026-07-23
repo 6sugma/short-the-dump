@@ -1,0 +1,56 @@
+[runtime]
+mode = "alert_only"
+database_path = "short_the_dump.db"
+manual_approval_required = true
+live_order_routing_enabled = false
+data_stale_after_seconds = 90
+
+[detection]
+allowed_exchanges = ["NASDAQ", "NYSE", "NYSEAMERICAN"]
+min_price = 0.25
+max_price = 20.0
+max_float_shares = 20000000
+max_market_cap = 500000000
+min_day0_return = 0.50
+min_relative_volume = 5.0
+min_dollar_volume = 1000000
+
+[signals]
+alert_score = 62.0
+high_conviction_score = 78.0
+minimum_catalyst_confidence = 0.20
+opening_range_minutes = 15
+lower_high_lookback_bars = 5
+failed_reclaim_tolerance_bps = 15.0
+
+[execution]
+max_borrow_fee_annualized = 3.0
+max_locate_cost_bps = 500.0
+max_spread_bps = 150.0
+min_shortable_shares = 100
+max_volume_participation = 0.05
+min_average_bar_dollar_volume = 25000
+require_rule201_price_test_support = true
+reject_during_halt = true
+inventory_stale_after_seconds = 60
+market_data_stale_after_seconds = 90
+
+[risk]
+account_equity = 100000.0
+risk_per_trade_fraction = 0.0025
+max_position_notional_fraction = 0.05
+max_gross_short_fraction = 0.15
+max_daily_loss_fraction = 0.01
+max_concurrent_positions = 3
+max_symbol_loss_fraction = 0.004
+halt_gap_reserve_fraction = 0.30
+no_averaging_into_losers = true
+
+[backtest]
+base_slippage_bps = 20.0
+spread_cross_fraction = 0.5
+impact_bps_at_max_participation = 80.0
+max_volume_participation = 0.05
+forced_buy_in_slippage_bps = 250.0
+recall_cover_delay_bars = 1
+locate_expiry_hours = 24
